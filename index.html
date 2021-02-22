@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  #mydiv {
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+  }
+
+  #mydivheader {
+    padding: 10px;
+    cursor: move;
+    z-index: 10;
+    background-color: #2196F3;
+    color: #fff;
+  }
+</style>
+
+<body>
+  <div id="dim">
+    <h1>Draggable DIV Element</h1>
+
+    <p>Click and hold the mouse button down while moving the DIV element</p>
+
+    <div id="mydiv">
+      <div id="mydivheader">Click here to move</div>
+      <p>Move</p>
+      <p>this</p>
+      <p>DIV</p>
+    </div>
+  </div>
+
+  <script>
+    //Make the DIV element draggagle:
+    var elementsDrag = document.getElementById("mydiv");
+    dragElement(elementsDrag);
+    var touchesInAction = {};
+    function dragElement(elmnt) {
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      //addind touch event listners 
+      var newPos = document.getElementById(elmnt.id + "header");
+      if (newPos) {
+        /* if present, the header is where you move the DIV from:*/
+        newPos.onmousedown = dragMouseDown;
+        newPos.addEventListener("touchstart", touchStartHandler, false);
+      } else {
+        /* otherwise, move the DIV from anywhere inside the DIV:*/
+        elmnt.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.addEventListener("touchend", closeDragElement, false);
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        console.log("Detected Drag in elements");
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        /* stop moving when mouse button is released:*/
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+      
+
+      function touchStartHandler(event) {
+        console.log("Started");
+        var touches = event.changedTouches;
+
+        for (var j = 0; j < touches.length; j++) {
+
+          /* store touch info on touchstart */
+          touchesInAction["$" + touches[j].identifier] = {
+
+            identifier: touches[j].identifier,
+            pageX: touches[j].pageX,
+            pageY: touches[j].pageY
+          };
+        }
+        document.addEventListener("touchmove", touchEndHandler, false);
+      }
+
+      function touchEndHandler(event) {
+        console.log("Started drag");
+        var touches = event.changedTouches;
+
+        for (var j = 0; j < touches.length; j++) {
+
+          /* access stored touch info on touchend */
+          var theTouchInfo = touchesInAction["$" + touches[j].identifier];
+          theTouchInfo.dx = touches[j].pageX - theTouchInfo.pageX;  /* x-distance moved since touchstart */
+          theTouchInfo.dy = touches[j].pageY - theTouchInfo.pageY;
+          /* y-distance moved since touchstart */
+        }
+        elmnt.style.top = (elmnt.offsetTop - theTouchInfo.dx) + "px";
+          elmnt.style.left = (elmnt.offsetLeft - theTouchInfo.dy) + "px";
+
+        /* determine what gesture was performed, based on dx and dy (tap, swipe, one or two fingers etc. */
+
+      }
+    }
+//adding touch
+    /*document.addEventListener("touchstart", touch2Mouse, true);
+    document.addEventListener("touchmove", touch2Mouse, true);
+    document.addEventListener("touchend", touch2Mouse, true);
+    function touch2Mouse(e)
+    {
+      var theTouch = e.changedTouches[0];
+      var mouseEv;
+    
+      switch(e.type)
+      {
+        case "touchstart": mouseEv="mousedown"; break;
+        case "touchend":   mouseEv="mouseup"; break;
+        case "touchmove":  mouseEv="mousemove"; break;
+        default: return;
+      }
+    
+      var mouseEvent = document.createEvent("MouseEvent");
+      mouseEvent.initMouseEvent(mouseEv, true, true, window, 1, theTouch.screenX, theTouch.screenY, theTouch.clientX, theTouch.clientY, false, false, false, false, 0, null);
+      theTouch.target.dispatchEvent(mouseEvent);
+    
+      e.preventDefault();
+    }*/
+
+//implementinf touches in this examples \
+
+
+  </script>
+
+</body>
+
+</html>
