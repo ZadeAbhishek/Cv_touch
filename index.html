@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" 
+  content="width=device-width, initial-scale=1.0, user-scalable=no">
 <style>
   #mydiv {
     position: absolute;
@@ -16,6 +17,10 @@
     z-index: 10;
     background-color: #2196F3;
     color: #fff;
+  }
+  body{
+    height: 667;
+    width: 375;
   }
 </style>
 
@@ -45,7 +50,7 @@
       if (newPos) {
         /* if present, the header is where you move the DIV from:*/
         newPos.onmousedown = dragMouseDown;
-        newPos.addEventListener("touchstart", touchStartHandler, false);
+      //  newPos.addEventListener("touchstart", touchStartHandler, false);
       } else {
         /* otherwise, move the DIV from anywhere inside the DIV:*/
         elmnt.onmousedown = dragMouseDown;
@@ -57,7 +62,7 @@
         // get the mouse cursor position at startup:
         pos3 = e.clientX;
         pos4 = e.clientY;
-        document.addEventListener("touchend", closeDragElement, false);
+       // document.addEventListener("touchend", closeDragElement, false);
         document.onmouseup = closeDragElement;
         // call a function whenever the cursor moves:
         
@@ -103,6 +108,7 @@
       }
 
       function touchEndHandler(event) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         console.log("Started drag");
         var touches = event.changedTouches;
 
@@ -144,8 +150,21 @@
     
       e.preventDefault();
     }*/
+    document.body.addEventListener('touchmove', function(event) {
+  event.preventDefault();
+}, false); 
 
 //implementinf touches in this examples \
+var obj = document.getElementById('mydiv');
+obj.addEventListener('touchmove', function(event) {
+  // If there's exactly one finger inside this element
+  if (event.targetTouches.length == 1) {
+    var touch = event.targetTouches[0];
+    // Place element where the finger is
+    obj.style.left = touch.pageX + 'px';
+    obj.style.top = touch.pageY + 'px';
+  }
+}, false);
 
 
   </script>
