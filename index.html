@@ -22,6 +22,9 @@
     height: 667;
     width: 375;
   }
+  #touch_test_1{
+    z-index: 11;
+  }
 </style>
 
 <body>
@@ -36,6 +39,9 @@
       <p>this</p>
       <p>DIV</p>
     </div>
+  </div>
+  <div id="touch_test_1">
+    <img src="https://images.freeimages.com/images/small-previews/fec/sunset-rays-1391805.jpg" alt="alternatetext">
   </div>
 
   <script>
@@ -165,7 +171,17 @@ obj.addEventListener('touchmove', function(event) {
     obj.style.top = touch.pageY + 'px';
   }
 }, false);
-
+/*var img = document.getElementById('touch_test_1');
+img.addEventListener('touchmove', function(event) {
+  // If there's exactly one finger inside this element
+  if (event.targetTouches.length == 1) {
+    var touch = event.targetTouches[0];
+    // Place element where the finger is
+    img.style.left = touch.pageX + 'px';
+    img.style.top = touch.pageY + 'px';
+  }
+}, false);
+*/
 
   </script>
 
